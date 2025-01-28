@@ -9,7 +9,7 @@ class AuthRepository {
         _analytics = analytics;
 
   final FirebaseAuth _auth;
-  final FirebaseAnalytics _analytics; // Добавляем для Firebase Analytics
+  final FirebaseAnalytics _analytics;
   String _name = "";
 
   bool get isSignedIn => _auth.currentUser != null;

@@ -132,7 +132,6 @@ class _NavigationScreenState extends State<NavigationScreen> {
                 physics: const NeverScrollableScrollPhysics(),
                 children: [
                   ShopScreen(),
-                  TokenScreen(),
                   CartScreen(),
                   SettingScreen(),
                 ],
@@ -158,8 +157,6 @@ class _NavigationScreenState extends State<NavigationScreen> {
                   isFloating: true,
                   items: [
                     CustomNavigationBarItem(icon: const Icon(Entypo.shop)),
-                    CustomNavigationBarItem(
-                        icon: const Icon(FontAwesome.coffee)),
                     CustomNavigationBarItem(
                         icon: const Icon(FontAwesome.shopping_cart)),
                     CustomNavigationBarItem(
