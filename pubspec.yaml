@@ -23,6 +23,7 @@ dependencies:
   hydrated_bloc: ^9.1.1
   path_provider: ^2.0.15
   firebase_core: ^2.24.2
+  firebase_analytics: ^10.0.0
   firebase_auth: ^4.19.2
   cloud_firestore: ^4.17.0
   connectivity_plus: ^6.0.2
