@@ -18,10 +18,15 @@ class AuthRepository {
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
       _name = _auth.currentUser?.displayName ?? "";
-      // Логирование в Firebase Analytics
-      await _analytics.logEvent(name: 'user_sign_in', parameters: {
-        'email': email,
-      });
+
+      // Получаем UID пользователя
+      String? userId = _auth.currentUser?.uid;
+
+      if (userId != null) {
+        await _analytics.setUserId(id: userId); // Устанавливаем идентификатор пользователя
+        await _analytics.logEvent(name: 'user_sign_in');
+      }
+
       return (true, null);
     } catch (e) {
       FirebaseAuthException error = e as FirebaseAuthException;
@@ -36,21 +41,22 @@ class AuthRepository {
   Future<void> changeName(String name) async {
     await _auth.currentUser?.updateDisplayName(name);
     _name = name;
-    // Логирование изменения имени в Firebase Analytics
-    await _analytics.logEvent(name: 'user_change_name', parameters: {
-      'name': name,
-    });
+    await _analytics.logEvent(name: 'user_change_name', parameters: {'name': name});
   }
 
   Future<(bool, String?)> signUp(String email, String password, String name) async {
     try {
       await _auth.createUserWithEmailAndPassword(email: email, password: password);
       await _auth.currentUser?.updateDisplayName(name);
-      // Логирование регистрации пользователя в Firebase Analytics
-      await _analytics.logEvent(name: 'user_sign_up', parameters: {
-        'email': email,
-        'name': name,
-      });
+
+      // Получаем UID пользователя
+      String? userId = _auth.currentUser?.uid;
+
+      if (userId != null) {
+        await _analytics.setUserId(id: userId); // Устанавливаем идентификатор пользователя
+        await _analytics.logEvent(name: 'user_sign_up');
+      }
+
       return (true, null);
     } catch (e) {
       FirebaseAuthException error = e as FirebaseAuthException;
@@ -60,7 +66,6 @@ class AuthRepository {
 
   Future<void> signOut() async {
     await _auth.signOut();
-    // Логирование выхода из приложения в Firebase Analytics
     await _analytics.logEvent(name: 'user_sign_out');
   }
 
@@ -71,7 +76,6 @@ class AuthRepository {
       await _auth.currentUser?.reauthenticateWithCredential(credential);
       await FirebaseFirestore.instance.collection("users").doc(getUid()).delete();
       await _auth.currentUser?.delete();
-      // Логирование удаления аккаунта в Firebase Analytics
       await _analytics.logEvent(name: 'user_delete_account');
       return true;
     } catch (e) {
